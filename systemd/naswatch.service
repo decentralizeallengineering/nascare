@@ -1,0 +1,6 @@
+[Unit]
+Description=NAS pool and SMART watcher
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/naswatch.sh

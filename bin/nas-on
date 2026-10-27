@@ -1,0 +1,13 @@
+#!/bin/bash
+# nas-on: spin the NAS drives up and import the pool (nas-off reverses it). Takes no arguments; --help exits 2.
+# A stopped SAS drive that gets any I/O fails "initializing command required" and the kernel sets it offline, so the SCSI
+# device state is set back to running before sg_start --start.
+case ${1-} in
+  "") ;;
+  *) echo "usage: nas-on   (no arguments; any argument, --help included, exits 2 without touching a disk)"; exit 2;;
+esac
+. "$(dirname "$(readlink -f "$0")")/nascare-conf.sh" || exit 2
+set -e
+nas_ssh "sudo -n rm -f /run/nas-off; for d in $NAS_DRIVES; do [ \"\$(cat /sys/block/\$d/device/state)\" = running ] || echo running | sudo -n tee /sys/block/\$d/device/state >/dev/null; sudo -n sg_start --start /dev/\$d; done; sudo -n zpool import $NAS_POOL; sudo -n zpool list -H -o name,health $NAS_POOL"
+rm -f "$NASCARE_STATE_DIR/.nas-off"
+for u in $NAS_PAUSE_UNITS; do systemctl --user start "$u"; done

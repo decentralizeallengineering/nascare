@@ -1,0 +1,15 @@
+#!/bin/bash
+# nas-off: export the pool and spin the NAS drives down; writes the .nas-off flag (it holds the kernel's "Spinning up" count so
+# nas-health can detect unexpected spin-ups). Refuses while a scrub or resilver is running. Takes no arguments; --help exits 2.
+# Stops NAS_PAUSE_UNITS first (user timers that move data to the NAS). Undo with nas-on.
+case ${1-} in
+  "") ;;
+  *) echo "usage: nas-off   (no arguments; any argument, --help included, exits 2 without touching a disk)"; exit 2;;
+esac
+. "$(dirname "$(readlink -f "$0")")/nascare-conf.sh" || exit 2
+set -e
+st=$(nas_ssh "sudo -n zpool status $NAS_POOL 2>/dev/null" || true)
+grep -qE "(resilver|scrub) in progress" <<<"$st" && { echo "nas-off: refused: $(grep -oE "(resilver|scrub) in progress[^;]*" <<<"$st" | head -1)" >&2; exit 2; }
+for u in $NAS_PAUSE_UNITS; do systemctl --user stop "$u"; done
+nas_ssh "sudo -n touch /run/nas-off; sudo -n zpool export $NAS_POOL; for d in $NAS_DRIVES; do sudo -n sg_start --stop /dev/\$(ls /sys/block/\$d/device/scsi_generic/); done"
+nas_ssh 'sudo -n dmesg | grep -c "Spinning up"' > "$NASCARE_STATE_DIR/.nas-off"

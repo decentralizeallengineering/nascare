@@ -1,0 +1,9 @@
+[Unit]
+Description=NAS hardware health check every 15 min
+
+[Timer]
+OnCalendar=*:2/15
+Persistent=true
+
+[Install]
+WantedBy=timers.target

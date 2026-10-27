@@ -1,0 +1,6 @@
+[Unit]
+Description=NAS hardware health check
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/nas-health.sh

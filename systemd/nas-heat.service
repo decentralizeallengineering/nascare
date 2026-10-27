@@ -1,0 +1,6 @@
+[Unit]
+Description=NAS heat policy
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/nas-heat.py

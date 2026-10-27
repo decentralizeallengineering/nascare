@@ -1,0 +1,6 @@
+[Unit]
+Description=NAS zpool error-growth check
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/nas-err-check.sh

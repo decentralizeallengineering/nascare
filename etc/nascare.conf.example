@@ -1,0 +1,21 @@
+# nascare.conf: copy to ~/.config/nascare/nascare.conf (or point NASCARE_CONF at it).
+# Plain KEY=VALUE lines, never executed as shell. An environment variable of the same name wins over this file.
+
+NAS_HOST=ann@nas.example.invalid     # required: user@host, ssh key login, passwordless sudo for smartctl, zpool, sg3_utils, dmesg
+#NAS_SSH_OPTS=-o BatchMode=yes -o ConnectTimeout=10
+#NAS_POOL=tank
+#NAS_DRIVES=sda sdb sdc               # the pool's SAS drives
+#NASCARE_STATE_DIR=                   # default ~/.local/state/nascare (flags .nas-hot .nas-off, histories, state)
+#ALERT_FILE=                          # default <state dir>/alerts.log; one ALERT line per problem
+
+# temperatures in degrees C
+#NAS_SPINDOWN_C=45                    # nas-heat: set .nas-hot, spin idle drives down
+#NAS_SHUTDOWN_C=50                    # nas-heat: export the pool, power the NAS off
+#NAS_CLEAR_C=42                       # nas-heat: clear .nas-hot below this
+#NAS_ALERT_C=55                       # nas-health: alert at or above, run nas-off above
+
+#NAS_OFF_CMD=                         # default: nas-off next to the scripts; any command that exports the pool and spins drives down
+#NAS_PAUSE_UNITS=                     # user timers that move data to the NAS; stopped by nas-off, started by nas-on
+#NAS_BASE_DEFECTS=sdc=16              # known-old grown-defect counts so only new growth alerts
+#NAS_FAN_INPUT=fan5                   # hwmon fan input of the drive-bay fan; empty disables the fan check
+#NAS_ALARM_HOOK=                      # command called with the line when nas-err-check exports the pool

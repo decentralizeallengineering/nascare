@@ -1,0 +1,6 @@
+[Unit]
+Description=NAS drive cool-down guard (only acts while .nas-off exists)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/nas-cool.sh
