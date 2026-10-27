@@ -1,5 +1,7 @@
 # nascare
 
+[![tests](https://github.com/decentralizeallengineering/nascare/actions/workflows/tests.yml/badge.svg)](https://github.com/decentralizeallengineering/nascare/actions/workflows/tests.yml) ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
+
 Watchdog scripts for a small ZFS NAS (SAS drives, a pool you may want to keep spun down) that lives somewhere hot.
 
 Run from another machine over ssh, they alert on pool and SMART problems, spin the drives down before they overheat,
